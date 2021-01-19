@@ -377,15 +377,26 @@ function LoginScreen() {
             }}
           />
         </MapView>
-        <ButtonContainer>
-          <Button
-            text="LOCATE"
-            onPress={async () => {
-              let location = await Location.getCurrentPositionAsync({});
-              setLocation(location);
-            }}
-          />
-        </ButtonContainer>
+        {!loading ? (
+          <ButtonContainer>
+            <Button
+              text="LOCATE"
+              onPress={async () => {
+                setLoading(true);
+                let location = await Location.getCurrentPositionAsync({});
+                setLocation(location);
+                setLoading(false);
+              }}
+            />
+          </ButtonContainer>
+        ) : (
+          <ActivityIndicator
+            size="large"
+            color={colors.four}
+            style={{ paddingTop: 10 }}
+          ></ActivityIndicator>
+        )}
+
         <ErrorMessage error={errorMsg} visible={errorMsg} />
         {/* <FlatList
           data={list}
@@ -438,21 +449,15 @@ function LoginScreen() {
               }
             />
           </View>
-          {!loading ? (
-            <ButtonContainer>
-              <Button
-                text="PUSH"
-                login={false}
-                onPress={() => setItem(userField)}
-              />
-            </ButtonContainer>
-          ) : (
-            <ActivityIndicator
-              size="large"
-              color={colors.four}
-              style={{ paddingTop: 10 }}
-            ></ActivityIndicator>
-          )}
+
+          <ButtonContainer>
+            <Button
+              text="PUSH"
+              login={false}
+              onPress={() => setItem(userField)}
+            />
+          </ButtonContainer>
+
           <ErrorMessage error="Invalid and/or Empty fields." visible={error} />
           <Text style={[styles.text, { textAlign: "center" }]}>
             PUSH response:
